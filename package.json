@@ -11,7 +11,9 @@
   "dependencies": {
     "@apollo/server": "^4.4.1",
     "graphql": "^16.6.0",
+    "graphql-tag": "^2.12.6",
     "install": "^0.13.0",
+    "node": "^19.6.1",
     "npm": "^9.6.0"
   }
 }
