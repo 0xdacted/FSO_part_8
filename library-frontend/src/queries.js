@@ -21,11 +21,10 @@ export const ALL_BOOKS = gql`
 `
 
 export const EDIT_AUTHOR = gql`
-mutation editAuthor($name: String!, $born: Int!) {
-  editAuthor(name: $name, born: $born) {
+mutation editAuthor($name: String!, $setBornTo: Int!) {
+  editAuthor(name: $name, setBornTo: $setBornTo) {
     name
     born
-    bookCount
   }
 }
 `

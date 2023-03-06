@@ -1,27 +1,37 @@
 import { useState } from "react"
 import { useMutation } from '@apollo/client'
+import { EDIT_AUTHOR } from '../queries'
 
-const editAuthorForm = () => {
+const EditAuthorForm = () => {
   const [name, setName] = useState('')
-  const [birthYear, setBirthYear] = useState(null)
+  const [birthYear, setBirthYear] = useState('')
+
+  const [ changeBirthYear ] = useMutation(EDIT_AUTHOR)
 
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     event.preventDefault()
+
+    const birthYearInt = parseInt(birthYear, 10)
+    changeBirthYear({ variables: { name, setBornTo: birthYearInt }})
+    setName('')
+    setBirthYear('')
 
   }
   return (
     <div>
-    <h2>Set birth year</h2>
-    <form onSubmit={handleSubmit()}>
-      <div>
-      name <input value={name} onChange={({ target }) => setName(target.value)}/>
-      </div>
-      <div>
-        birth year <input value={birthYear} onChange={({ target }) => setBirthYear(target.value)} />
-      </div>
-      <button type="submit">change birth year</button>
-    </form>
+      <h2>Set birth year</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+        name <input value={name} onChange={({ target }) => setName(target.value)}/>
+        </div>
+        <div>
+          birth year <input value={birthYear} onChange={({ target }) => setBirthYear(target.value)} />
+        </div>
+        <button type="submit">change birth year</button>
+      </form>
     </div>
   )
 }
+
+export default EditAuthorForm
