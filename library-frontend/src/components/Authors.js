@@ -3,7 +3,9 @@ import { useQuery } from '@apollo/client'
 import EditAuthorForm from './EditAuthorForm'
 
 const Authors = () => {
-  const result = useQuery(ALL_AUTHORS)
+  const result = useQuery(ALL_AUTHORS, {
+    pollInterval: 2000
+  })
   if (result.loading) {
     return <div>loading...</div>
   }
