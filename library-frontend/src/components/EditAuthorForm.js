@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { useMutation } from '@apollo/client'
+import Select from 'react-select'
+import { useMutation, useQuery } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
 const EditAuthorForm = () => {
-  const [name, setName] = useState('')
+  const [selectedAuthor, setSelectedAuthor] = useState(null)
   const [birthYear, setBirthYear] = useState('')
 
   const [ changeBirthYear ] = useMutation(EDIT_AUTHOR, {
@@ -11,25 +12,44 @@ const EditAuthorForm = () => {
   })
 
 
+  const { data } = useQuery(ALL_AUTHORS)
+
   const handleSubmit = (event) => {
     event.preventDefault()
 
     const birthYearInt = parseInt(birthYear, 10)
-    changeBirthYear({ variables: { name, setBornTo: birthYearInt }})
-    setName('')
+    changeBirthYear({ variables: { name: selectedAuthor, setBornTo: birthYearInt }})
+    setSelectedAuthor(null)
     setBirthYear('')
 
   }
+  const handleAuthorChange = (selectedOption) => {
+    setSelectedAuthor(selectedOption.value)
+  }
+
+  const authorOptions = data.allAuthors.map(a => {
+    return {value: a.name, label: a.name}
+  })
+
+  
   return (
     <div>
       <h2>Set birth year</h2>
       <form onSubmit={handleSubmit}>
         <div>
-        name <input value={name} onChange={({ target }) => setName(target.value)}/>
+          <label htmlFor="author-select">Select Author:</label>
+          <Select 
+          id="author-select"
+          options={authorOptions}
+          onChange={handleAuthorChange}
+          value={selectedAuthor ? {value: selectedAuthor, label: selectedAuthor } : null}
+          />
         </div>
-        <div>
+        {selectedAuthor && 
+          <div>
           birth year <input value={birthYear} onChange={({ target }) => setBirthYear(target.value)} />
-        </div>
+          </div>
+           }
         <button type="submit">change birth year</button>
       </form>
     </div>
