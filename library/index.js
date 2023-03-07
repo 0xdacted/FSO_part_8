@@ -116,10 +116,8 @@ const resolvers = {
         author = new Author({ name: args.author }) 
         author = await author.save()
       }
-      console.log(author)
       const book = new Book({...args, author: author._id})
       await book.save()
-      const populatedBook = await book.populate('author')
     
       return book
     } catch (error) {
@@ -159,7 +157,6 @@ const resolvers = {
         username: user.username,
         id: user._id
       }
-      console.log()
       return { value: jwt.sign(userForToken, JWT_SECRET)}
     }
   }
