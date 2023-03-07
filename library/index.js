@@ -139,10 +139,21 @@ const resolvers = {
       try {
         return await user.save()
       } catch (error) {
-        throw new UserInputError(error.message, {
+        throw new GraphQLError(error.message, {
           invalidArgs: args
         })
       }
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+      if (!user || args.password !== 'password123') {
+        throw new GraphQLError('Invalid Credentials')
+      }
+      const userForToken = {
+        username: user.username,
+        id: user._id
+      }
+      return { value: jwt.sign(userForToken, JWT_SECRET)}
     }
   }
 }
