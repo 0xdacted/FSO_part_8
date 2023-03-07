@@ -49,6 +49,10 @@ const typeDefs = `
       name: String!
       setBornTo: Int!
     ): Author
+    addAuthor(
+      name: String!
+      born: Int
+    ): Author
   }
 `
 
@@ -72,6 +76,10 @@ const resolvers = {
     addBook: async (root, args) => {
       const book = new Book({...args})
       return book.save()
+    },
+    addAuthor: async (root, args) => {
+      const author = new Author({...args})
+      return author.save()
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
