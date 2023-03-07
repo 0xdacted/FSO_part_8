@@ -5,6 +5,7 @@ const Book = require('./models/Book')
 const Author = require('./models/Author')
 
 const mongoose = require('mongoose')
+const { GraphQLError } = require('graphql')
 mongoose.set('strictQuery', false)
 require('dotenv').config()
 
@@ -82,6 +83,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
+      try {
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author }) 
@@ -90,11 +92,17 @@ const resolvers = {
     
       const book = new Book({...args, author: author._id})
       return book.save()
+    } catch (error) {
+      throw new GraphQLError(error.message)
+    }
     },
     addAuthor: async (root, args) => {
+      try {
       const author = new Author({...args})
-     
       return author.save()
+      } catch (error) {
+        throw new GraphQLError(error.message)
+      }
     },
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
