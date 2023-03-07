@@ -4,7 +4,7 @@ const { v1: uuid } = require('uuid')
 const Book = require('./models/Book')
 const Author = require('./models/Author')
 const User = require('./models/User')
-
+const JWT_SECRET = 'myjwtsecret'
 const mongoose = require('mongoose')
 const { GraphQLError } = require('graphql')
 mongoose.set('strictQuery', false)
@@ -97,7 +97,10 @@ const resolvers = {
         const bookCount = books.filter(book => String(book.author._id) === String(author._id)).length
         return { ...author._doc, bookCount }
       })
-    }
+    },
+    me: (root, args, context) => {
+      return context.currentUser
+    },
   },
   Mutation: {
     addBook: async (root, args) => {
@@ -126,6 +129,20 @@ const resolvers = {
       const author = await Author.findOne({ name: args.name })
       author.born = args.setBornTo
       return author.save()
+    },
+    createUser: async (root, args) => {
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+        password: 'password123'
+      })
+      try {
+        return await user.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args
+        })
+      }
     }
   }
 }
