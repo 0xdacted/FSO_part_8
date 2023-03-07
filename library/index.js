@@ -4,6 +4,7 @@ const { v1: uuid } = require('uuid')
 const Book = require('./models/Book')
 const Author = require('./models/Author')
 const User = require('./models/User')
+const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'myjwtsecret'
 const mongoose = require('mongoose')
 const { GraphQLError } = require('graphql')
