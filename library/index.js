@@ -116,20 +116,15 @@ const resolvers = {
         author = new Author({ name: args.author }) 
         author = await author.save()
       }
-    
+      console.log(author)
       const book = new Book({...args, author: author._id})
-      return book.save()
+      await book.save()
+      const populatedBook = await book.populate('author')
+    
+      return book
     } catch (error) {
       throw new GraphQLError(error.message)
     }
-    },
-    addAuthor: async (root, args, context) => {
-      try {
-      const author = new Author({...args})
-      return author.save()
-      } catch (error) {
-        throw new GraphQLError(error.message)
-      }
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
@@ -164,6 +159,7 @@ const resolvers = {
         username: user.username,
         id: user._id
       }
+      console.log()
       return { value: jwt.sign(userForToken, JWT_SECRET)}
     }
   }
@@ -181,9 +177,8 @@ startStandaloneServer(server, {
     const auth = req ? req.headers.authorization : null
     if (auth && auth.startsWith('Bearer ')) {
       const decodedToken = jwt.verify(
-        auth.substring(7).JWT_SECRET
-      )
-      console.log(decodedToken)
+        auth.substring(7), JWT_SECRET
+      )     
       const currentUser = await User.findById(decodedToken.id)
       return { currentUser }
     }
