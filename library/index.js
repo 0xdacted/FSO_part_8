@@ -64,7 +64,7 @@ const resolvers = {
       let query = {}
       if (args.author) {
         const author = await Author.findOne({ name: args.author })
-        query = { author: author._id}
+        query = { author: author.id}
       }
       if (args.genre) {
         query.genres = { $in: [args.genre] }
@@ -73,10 +73,10 @@ const resolvers = {
     },
     allAuthors: async () => {
       const authors = await Author.find({})
-      const books = await Book.find({})
+      const books = await Book.find({}).populate('author')
       return authors.map(author => {
-        const bookCount = books.filter(book => book.author === author.name).length
-        return {...author, bookCount}
+        const bookCount = books.filter(book => String(book.author._id) === String(author._id)).length
+        return { ...author._doc, bookCount }
       })
     }
   },
@@ -89,8 +89,6 @@ const resolvers = {
       }
     
       const book = new Book({...args, author: author._id})
-      console.log(author)
-      console.log(book)
       return book.save()
     },
     addAuthor: async (root, args) => {
