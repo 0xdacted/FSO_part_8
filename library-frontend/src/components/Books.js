@@ -3,8 +3,11 @@ import { useQuery } from '@apollo/client'
 import { useState } from 'react';
 
 const Books = () => {
-  const { loading, error, data } = useQuery(ALL_BOOKS);
   const [selectedGenres, setSelectedGenres] = useState([])
+   const { loading, error, data } = useQuery(ALL_BOOKS, {
+    variables: { genre: selectedGenres.length > 0 ? selectedGenres[0] : null },
+  });
+
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {`${error}`}</p>
@@ -12,8 +15,6 @@ const Books = () => {
   const books = data.allBooks
   const genres = books.map(b => b.genres)
   const uniqueGenres = Array.from(new Set(genres.flat()))
-
-  const filteredBooks = selectedGenres.length > 0 ? books.filter(b => b.genres.some(g => selectedGenres.includes(g))) : books
 
   return (
     <div>
@@ -46,7 +47,7 @@ const Books = () => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {books.map((a) => (
             
             <tr key={a.title}>
               <td>{a.title}</td>
