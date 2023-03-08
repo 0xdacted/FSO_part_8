@@ -24,7 +24,7 @@ const App = () => {
   return (
     <Router>
       <div>
-        {!token ? <LoginForm setToken={setToken}></LoginForm> : <button onClick={logout}>logout</button>}
+        {!token ? <LoginForm setToken={setToken}></LoginForm> : <div> <Link to="/add">Add Book</Link> <button onClick={logout}>logout</button> </div>}
       </div>
       <div>
         <nav>
@@ -34,9 +34,6 @@ const App = () => {
             </li>
             <li>
               <Link to="/books">Books</Link>
-            </li>
-            <li>
-              <Link to="/add">Add Book</Link>
             </li>
           </ul>
         </nav>
