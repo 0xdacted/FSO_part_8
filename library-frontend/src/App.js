@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Authors from './components/Authors'
@@ -15,6 +15,11 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
   }
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('library-user-token')
+    userToken ? setToken(userToken) : setToken(null)
+  }, [token])
 
   return (
     <Router>
