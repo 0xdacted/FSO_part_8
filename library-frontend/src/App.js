@@ -11,7 +11,7 @@ const App = () => {
   return (
     <Router>
       <div>
-        {!token && <LoginForm></LoginForm>}
+        {!token && <LoginForm setToken={setToken}></LoginForm>}
       </div>
       <div>
         <nav>
