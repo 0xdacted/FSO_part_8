@@ -80,13 +80,13 @@ const resolvers = {
   Query: {
     bookCount: async () =>  Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
-    allBooks: async () => {
+    allBooks: async (root, args) => {
       const genre = args.genre;
       let query = {};
       if (genre) {
         query = { genres: { $in: [genre] } };
       }
-      const books = await Book.find().populate('author');
+      const books = await Book.find(query).populate('author');
       return books.map((book) => ({
         title: book.title,
         published: book.published,
