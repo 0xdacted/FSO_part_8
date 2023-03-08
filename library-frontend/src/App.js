@@ -5,6 +5,13 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 
 const App = () => {
+  const [token, setToken] = useState(null)
+
+  if (!token) {
+    return (
+      <LoginForm setToken={token}></LoginForm>
+    )
+  }
   return (
     <Router>
       <div>
