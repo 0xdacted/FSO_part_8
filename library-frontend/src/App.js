@@ -3,17 +3,16 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [token, setToken] = useState(null)
 
-  if (!token) {
-    return (
-      <LoginForm setToken={token}></LoginForm>
-    )
-  }
   return (
     <Router>
+      <div>
+        {!token && <LoginForm></LoginForm>}
+      </div>
       <div>
         <nav>
           <ul>
