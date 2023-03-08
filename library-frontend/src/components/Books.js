@@ -1,10 +1,10 @@
 import { ALL_BOOKS } from '../queries'
-import { useQuery } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client'
 import { useState } from 'react';
 
 const Books = () => {
   const [selectedGenres, setSelectedGenres] = useState([])
-   const { loading, error, data } = useQuery(ALL_BOOKS, {
+  const { loading, error, data, refetch } = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenres.length > 0 ? selectedGenres[0] : null },
   });
 
@@ -25,20 +25,23 @@ const Books = () => {
           <label key={genre}>
             {genre}
             <input type="checkbox" checked={selectedGenres.includes(genre)}
-            onChange={e => {
+            onChange={async e =>  {
               if (e.target.checked) {
-                setSelectedGenres([...selectedGenres, genre])
+                await setSelectedGenres([...selectedGenres, genre])
               } else {
-                setSelectedGenres(selectedGenres.filter(g => g !== genre))
+                await setSelectedGenres(selectedGenres.filter(g => g !== genre))
               }
-
+            refetch()
             }}
           
             />
           </label>
         )))}
       </div>
-      <button onClick={() => setSelectedGenres([])}>clear filters</button>
+      <button onClick={async () => { 
+        await setSelectedGenres([])
+        refetch()
+      }}>clear filters</button>
 
       <table>
         <tbody>
