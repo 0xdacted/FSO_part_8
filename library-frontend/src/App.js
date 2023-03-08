@@ -36,10 +36,14 @@ const App = () => {
             <li>
               <Link to="/books">Books</Link>
             </li>
+            <li>
+              <Link to='/recommended'>Recommended</Link>
+            </li>
           </ul>
         </nav>
 
         <Routes>
+          <Route path='/recommended' element={<RecommendedPage />} />
           <Route path="/authors" element={<Authors />} />
           <Route path="/books" element={<Books />} />
           <Route path="/add" element={<NewBook />} />

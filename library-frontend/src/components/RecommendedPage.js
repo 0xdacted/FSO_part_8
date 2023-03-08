@@ -19,8 +19,10 @@ const RecommendedPage = () => {
         <tbody>
           <tr>
             <th></th>
+            {recommendedBooks.length > 0 && <div>
             <th>author</th>
-            <th>published</th>
+            <th>published</th> 
+            </div>}
           </tr>
           {recommendedBooks.map((a) => (
             <tr key={a.title}>
