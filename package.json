@@ -11,9 +11,12 @@
   "dependencies": {
     "@apollo/client": "^3.7.9",
     "@apollo/server": "^4.4.1",
+    "dotenv": "^16.0.3",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
     "install": "^0.13.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.0.0",
     "node": "^19.6.1",
     "npm": "^9.6.0"
   }
