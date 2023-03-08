@@ -17,7 +17,7 @@ const NewBook = () => {
     event.preventDefault()
 
     console.log('add book...')
-    addNewBook(title, author, published, genres)
+    addNewBook({ variables: { title, author, published, genres } })
 
     setTitle('')
     setPublished('')
@@ -53,7 +53,7 @@ const NewBook = () => {
           <input
             type="number"
             value={published}
-            onChange={({ target }) => setPublished(target.value)}
+            onChange={({ target }) => setPublished(parseInt(target.value))}
           />
         </div>
         <div>
