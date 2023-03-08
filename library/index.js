@@ -82,6 +82,7 @@ const resolvers = {
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async () => {
       const books = await Book.find().populate('author');
+      console.log(books)
       return books.map((book) => ({
         title: book.title,
         published: book.published,
@@ -91,7 +92,8 @@ const resolvers = {
         },
         genres: book.genres,
         id: book._id
-      }));
+      }
+      ));
     },
     allAuthors: async () => {
       const authors = await Author.find({})
@@ -119,6 +121,7 @@ const resolvers = {
         author = await author.save()
       }
       const book = new Book({...args, author: author._id})
+      await book.populate('author')
       await book.save()
     
       return book
