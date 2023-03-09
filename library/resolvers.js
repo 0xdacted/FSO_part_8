@@ -56,12 +56,14 @@ const resolvers = {
       const book = new Book({...args, author: author._id})
       await book.populate('author')
       await book.save()
+      
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
+      return book
     } catch (error) {
       throw new GraphQLError(error.message)
     }
     
-    pubsub.publish('BOOK_ADDED', { bookAdded: book })
-    return book
+   
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser
