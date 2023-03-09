@@ -1,12 +1,18 @@
 const { ApolloServer } = require('@apollo/server')
-const { startStandaloneServer } = require('@apollo/server/standalone')
-const typeDefs = require('./schema')
-const resolvers = require('./resolvers')
-const User = require('./models/User')
+const { expressMiddleware } = require('@apollo/server/express4')
+const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer')
+const { makeExecutableSchema } = require('@graphql-tools/schema')
+const express = require('express')
+const cors = require('cors')
+const bodyParser = require('body-parser')
+const http = require('http')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'myjwtsecret'
-
 const mongoose = require('mongoose')
+const User = require('./models/User')
+const typeDefs = require('./schema')
+const resolvers = require('./resolvers')
+
 mongoose.set('strictQuery', false)
 require('dotenv').config()
 
