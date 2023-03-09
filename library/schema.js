@@ -51,3 +51,4 @@ const typeDefs = `
     ): Token
   }
 `
+module.exports = typeDefs

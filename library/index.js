@@ -1,12 +1,12 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
-const { v1: uuid } = require('uuid')
-
+const typeDefs = require('./schema')
+const resolvers = require('./resolvers')
 const User = require('./models/User')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'myjwtsecret'
+
 const mongoose = require('mongoose')
-const { GraphQLError } = require('graphql')
 mongoose.set('strictQuery', false)
 require('dotenv').config()
 
