@@ -1,6 +1,6 @@
 const typeDefs = `
   type Subscription {
-    personAdded: Person!
+    bookAdded: Book!
   }
 
   type Query {
