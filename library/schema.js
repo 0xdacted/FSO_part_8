@@ -1,4 +1,8 @@
 const typeDefs = `
+  type Subscription {
+    personAdded: Person!
+  }
+
   type Query {
     bookCount: Int!
     authorCount: Int!
