@@ -16,7 +16,6 @@ const batchLoadBookCounts = async (authorIds) => {
     result[book._id.toString()] = book.bookCount
     return result
   }, {})
-  
   return authorIds.map((authorId) => bookCountsByAuthorId[authorId.toString() || 0])
 }
 
@@ -51,7 +50,8 @@ const resolvers = {
       return authors.map((author, index) => {
         return {
           ...author._doc,
-          bookCount: bookCounts[index]
+          bookCount: bookCounts[index] || 0
+          
         }
       })
     },
