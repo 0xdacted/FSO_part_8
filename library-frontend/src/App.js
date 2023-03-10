@@ -8,7 +8,7 @@ import LoginForm from './components/LoginForm'
 import RecommendedPage from './components/RecommendedPage'
 import { ALL_BOOKS, BOOK_ADDED } from './queries'
 
-export const updateCache = async (cache, query, addedBook, refetch) => {
+export const updateCache = async (cache, query, addedBook) => {
   const uniqByTitle = (a) => {
     let seen = new Set()
     return a.filter((item) => {
@@ -25,20 +25,19 @@ export const updateCache = async (cache, query, addedBook, refetch) => {
     }
   })
 
-  await refetch()
 }
 
 const App = () => {
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
-  const { loading, error, data: allBooks, refetch } = useQuery(ALL_BOOKS)
+  const { loading, error, data: allBooks } = useQuery(ALL_BOOKS)
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       const addedBook = data.data.bookAdded
       window.alert(`Book "${addedBook.title}" by ${addedBook.author.name} has been added!`)
-      updateCache(client.cache, { query: ALL_BOOKS }, addedBook, refetch)
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook)
     }
   })
 
