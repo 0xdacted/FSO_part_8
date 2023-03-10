@@ -1,4 +1,4 @@
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, BOOK_ADDED } from '../queries'
 import { useQuery, useSubscription } from '@apollo/client'
 import { useState } from 'react';
 
@@ -8,9 +8,15 @@ const Books = () => {
     variables: { genre: selectedGenres.length > 0 ? selectedGenres[0] : null },
   });
 
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      refetch()
+    }
+  })
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {`${error}`}</p>
+  
 
   const books = data.allBooks
   const genres = books.map(b => b.genres)

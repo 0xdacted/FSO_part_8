@@ -1,20 +1,44 @@
 import { useState, useEffect } from 'react'
-import { useApolloClient, useSubscription } from '@apollo/client'
+import { useQuery, useMutation, useApolloClient, useSubscription } from '@apollo/client'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import RecommendedPage from './components/RecommendedPage'
-import { BOOK_ADDED } from './queries'
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
+
+export const updateCache = async (cache, query, addedBook, refetch) => {
+  const uniqByTitle = (a) => {
+    let seen = new Set()
+    return a.filter((item) => {
+      if (item) {
+        let k = item.title
+        return seen.has(k) ? false : seen.add(k)
+      }
+    })
+  }
+  
+  cache.updateQuery(query, ({ allBooks }) => {
+    return {
+      allBooks: uniqByTitle(allBooks.concat(addedBook))
+    }
+  })
+
+  await refetch()
+}
 
 const App = () => {
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
+  const { loading, error, data: allBooks, refetch } = useQuery(ALL_BOOKS)
+
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
-      console.log(data)
+      const addedBook = data.data.bookAdded
+      window.alert(`Book "${addedBook.title}" by ${addedBook.author.name} has been added!`)
+      updateCache(client.cache, { query: ALL_BOOKS }, addedBook, refetch)
     }
   })
 
